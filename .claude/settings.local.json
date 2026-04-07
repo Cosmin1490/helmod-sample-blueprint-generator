@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:lua-api.factorio.com)",
+      "WebFetch(domain:factoriowiki.com)",
+      "WebFetch(domain:factorio.com)",
+      "WebFetch(domain:wiki.factorio.com)",
+      "WebSearch",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:pypi.org)"
+    ]
+  }
+}
