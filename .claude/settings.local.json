@@ -8,7 +8,12 @@
       "WebFetch(domain:wiki.factorio.com)",
       "WebSearch",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:pypi.org)"
+      "WebFetch(domain:pypi.org)",
+      "WebFetch(domain:mods.factorio.com)",
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(npx tsx:*)"
     ]
   }
 }
