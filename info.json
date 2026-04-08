@@ -1,0 +1,12 @@
+{
+  "name": "helmod-sample-blueprint-generator",
+  "version": "0.1.0",
+  "title": "Helmod Sample Blueprint Generator",
+  "author": "rbalan",
+  "description": "Generate placement blueprints from Helmod production plans. Adds a button to Helmod's summary panel that creates a blueprint with the correct buildings, recipes, and modules laid out on a grid.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0",
+    "helmod >= 2.2.6"
+  ]
+}

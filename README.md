@@ -1,100 +1,51 @@
-# helmod-generator
+# Helmod Sample Blueprint Generator
 
-Generate Factorio blueprints from [Helmod](https://mods.factorio.com/mod/helmod) production line exports.
+A Factorio 2.0 mod that generates placement blueprints from [Helmod](https://mods.factorio.com/mod/helmod) production plans.
 
-Design your production line in Helmod, export it, and run this tool to get a blueprint string you can import directly into Factorio — with the correct buildings, recipes, and modules already assigned.
-
-Built for **Factorio 2.0** and particularly useful with complex modpacks like **Pyanodon's**.
+Design your production line in Helmod, open the summary panel, and click **Generate Blueprint** to get a blueprint with the correct buildings, recipes, and modules laid out on a grid — ready to stamp down.
 
 ## How it works
 
-1. Design a production line in Helmod in-game
-2. Use Helmod's "Download" or "Copy to clipboard" to export it
-3. Run `helmod-generator` on the export string
-4. Paste the resulting blueprint string into Factorio
+1. Open Helmod and view a production model's summary panel
+2. Click the **Generate Blueprint** button (injected at the bottom of the panel)
+3. A blueprint is placed in your cursor with all buildings, recipes, and modules from the plan
+4. Stamp it down and wire things up
 
-The tool places buildings on a simple grid layout (no belt/pipe connections). Each building gets the correct recipe and modules assigned. You wire things up manually after placing the blueprint.
+Building sizes are read from the game's prototype data, so spacing is correct even with large modded buildings (e.g. Pyanodon's).
 
 ## Installation
 
-Requires Python 3.10+.
+Copy or symlink the repository folder into your Factorio mods directory:
+
+```
+~/Library/Application Support/factorio/mods/    # macOS
+~/.factorio/mods/                               # Linux
+%APPDATA%\Factorio\mods\                        # Windows
+```
+
+Or build a zip for distribution:
 
 ```bash
-git clone https://github.com/your-user/helmod-generator.git
-cd helmod-generator
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e .
+./build.sh
+# produces helmod-sample-blueprint-generator_0.1.0.zip
 ```
 
-## Usage
+## Requirements
 
-```bash
-# From clipboard (copy the export in Helmod first)
-helmod-generator --clipboard
-
-# From a file
-helmod-generator --file export.txt
-
-# Directly as an argument
-helmod-generator "0eNq..."
-
-# Copy the output blueprint straight to clipboard
-helmod-generator --clipboard --copy
-```
-
-### Options
-
-| Flag | Description |
-|------|-------------|
-| `--clipboard`, `-c` | Read Helmod export from clipboard |
-| `--file`, `-f` | Read Helmod export from a file |
-| `--copy` | Copy output blueprint to clipboard |
-| `--grid-spacing`, `-g` | Distance between buildings (default: 12) |
-| `--per-row`, `-r` | Buildings per row before wrapping (default: 10) |
-| `--label`, `-l` | Set a label on the blueprint |
-| `--verbose`, `-v` | Print a summary of the parsed production line |
-| `--json`, `-j` | Output raw blueprint JSON instead of encoded string |
-| `--raw` | Output raw decoded Helmod data (for debugging) |
-| `--decode-blueprint` | Decode an existing Factorio blueprint string to JSON |
-
-### Examples
-
-See what Helmod exported before generating:
-
-```bash
-helmod-generator --clipboard --verbose
-```
-
-```
-Block 0: petroleum-processing
-  3x oil-refinery -> advanced-oil-processing [4x productivity-module-3]
-  1x chemical-plant -> solid-fuel-from-light-oil [3x productivity-module-3]
-
-0eNq...
-```
-
-Adjust layout for larger buildings:
-
-```bash
-helmod-generator --clipboard --grid-spacing 8 --per-row 6
-```
-
-Inspect an existing Factorio blueprint:
-
-```bash
-helmod-generator --decode-blueprint "0eNq..." | python3 -m json.tool
-```
+- Factorio 2.0
+- [Helmod](https://mods.factorio.com/mod/helmod) >= 2.2.6
 
 ## Development
 
+The blueprint generation logic lives in `blueprint.lua` (pure Lua, no Factorio API dependencies). `control.lua` handles GUI injection and Factorio-specific calls.
+
+Run tests with [busted](https://lunarmodules.github.io/busted/):
+
 ```bash
-pip install -e ".[dev]"
-pytest
+busted
 ```
 
 ## Limitations
 
-- **Grid layout only** — buildings are placed in rows with no belt, pipe, or inserter connections. You connect them manually after importing.
-- **No beacon placement** — beacon data is parsed but not placed in the blueprint yet.
-- **Helmod format compatibility** — the decoder handles standard `serpent.dump` Lua serialization. If you encounter a parsing error with your export, open an issue with the export string.
+- **Grid layout only** — buildings are placed in rows with no belt, pipe, or inserter connections. You connect them manually after placing.
+- **No beacon placement** — beacon data from Helmod is not yet included in the blueprint.
